@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zago - Gestão de Clientes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { background-color: #f8f9fa; }
+        .card { border: none; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Gerenciador de Clientes</h2>
+
+    <div class="card p-4 mb-5">
+        <form action="/adicionar" method="POST" class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">Nome</label>
+                <input type="text" name="nome" class="form-control" placeholder="Nome completo" required>
+            </div>
+            <div class="col-md-6">
+                <label class="form-label">Email</label>
+                <input type="email" name="email" class="form-control" placeholder="exemplo@email.com" required>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Telefone</label>
+                <input type="text" name="telefone" class="form-control" placeholder="(00) 00000-0000">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Cidade</label>
+                <input type="text" name="cidade" class="form-control" placeholder="Sua Cidade">
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">Adicionar Cliente</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="card p-4">
+        <table class="table table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Nome</th>
+            <th>Email</th>
+            <th>Cidade</th>
+            <th>Telefone</th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for c in clientes %}
+        <tr>
+            <td>{{ c[0] }}</td>
+            <td>{{ c[1] }}</td>
+            <td>{{ c[2] }}</td>
+            <td>{{ c[3] }}</td>
+            <td>{{ c[4] }}</td>
+            <td>
+                <button class="btn btn-outline-warning btn-sm" 
+                        onclick="abrirModalEdicao('{{c[0]}}', '{{c[1]}}', '{{c[2]}}', '{{c[3]}}', '{{c[4]}}')">
+                    Editar
+                </button>
+                <a href="/deletar/{{ c[0] }}" class="btn btn-outline-danger btn-sm" onclick="return confirm('Excluir?')">Excluir</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+    </div>
+</div>
+<div class="modal fade" id="modalEditar" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Editar Cliente</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/editar" method="POST">
+                <div class="modal-body">
+                    <input type="hidden" name="id" id="edit-id">
+                    <div class="mb-3">
+                        <label class="form-label">Nome</label>
+                        <input type="text" name="nome" id="edit-nome" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="email" name="email" id="edit-email" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Cidade</label>
+                        <input type="text" name="cidade" id="edit-cid" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Telefone</label>
+                        <input type="text" name="telefone" id="edit-tel" class="form-control">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-success">Salvar Alterações</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    function abrirModalEdicao(id, nome, email, tel, cid) {
+        document.getElementById('edit-id').value = id;
+        document.getElementById('edit-nome').value = nome;
+        document.getElementById('edit-email').value = email;
+        document.getElementById('edit-tel').value = tel;
+        document.getElementById('edit-cid').value = cid;
+        
+        var meuModal = new bootstrap.Modal(document.getElementById('modalEditar'));
+        meuModal.show();
+    }
+</script>
+</body>
+</html>
