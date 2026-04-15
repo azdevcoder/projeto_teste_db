@@ -9,7 +9,7 @@ app = Flask(__name__)
 DB_URL = os.getenv("DATABASE_URL")
 
 def conectar():
-    return psycopg2.connect(DB_URL, sslmode='require')
+    return psycopg2.connect(DB_URL, sslmode='require') # O sslmode é essencial!
 
 # Criar tabela ao iniciar
 def criar_tabela():
